@@ -1,0 +1,128 @@
+swagger: '2.0'
+info:
+  description: This is a sample swagger file for ecommerce site with a small subset of API
+  version: 1.0.0
+  title: E-commerce Swagger
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: archana.bharadwaj@srijan.net
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+host: local:3000
+basePath: /v2
+tags:
+  - name: ecom
+    description: subset of e-commerce API
+    externalDocs:
+      description: Find out more
+      url: http://swagger.io
+schemes:
+  - https
+  - http
+paths:
+  /login:
+    post:
+      tags:
+        - login
+      summary: login to the application
+      description: ''
+      operationId: login
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: login parameters
+          required: true
+          schema:
+            $ref: '#/definitions/login'
+      responses:
+        '200':
+          description: successful login
+        '401':
+          description: Authentication failure
+        '403':
+          description: Not authorized to login
+        '405':
+          description: Method not allowed
+        '503':
+          description: Service not available
+      security:
+        - petstore_auth:
+            - write:pets
+            - read:pets
+  /userdetails:
+    get:
+      tags:
+        - user-details
+      summary: user details of application
+      description: ''
+      operationId: userdetails
+      produces:
+        - application/json
+      parameters:
+        - name: status
+          in: query
+          description: Status values that need to be considered for filter
+          required: true
+          type: array
+          items:
+            type: string
+            enum:
+              - available
+              - pending
+              - sold
+            default: available
+          collectionFormat: multi
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/userdetails'
+        '401':
+          description: authentication failure
+        '403':
+          description: Not authorized to get user details
+        '503':
+          description: Service not available
+      security:
+        - petstore_auth:
+            - write:pets
+            - read:pets
+securityDefinitions:
+  petstore_auth:
+    type: oauth2
+    authorizationUrl: http://petstore.swagger.io/oauth/dialog
+    flow: implicit
+    scopes:
+      write:pets: modify pets in your account
+      read:pets: read your pets
+definitions:
+  login:
+    type: object
+    properties:
+      username:
+        type: string
+      password:
+        type: string
+  userdetails:
+    type: object
+    properties:
+      firstname:
+        type: string
+      lastname:
+        type: string
+      email:
+        type: string
+      DOB:
+        type: string
+      Phone:
+        type: integer
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
